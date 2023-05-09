@@ -4,7 +4,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { FBAuthContext } from "../contexts/FBAuthContext";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export function Signup(props) {
     const [email, setEmail] = useState("")
@@ -12,8 +14,10 @@ export function Signup(props) {
     const [validEmail, setValidEmail] = useState(false)
     const [validPassword, setValidPassword] = useState(false)
 
+    const FBAuth = useContext(FBAuthContext)
+
     useEffect(() => {
-        if (email.indexOf("@") > 0) {
+        if (email.indexOf("@") > 0 && email.indexOf(".") > 0) {
             setValidEmail(true)
         } else {
             setValidEmail(false)
@@ -28,11 +32,26 @@ export function Signup(props) {
         }
     }, [password]);
 
+    const signUpHandler = () => {
+        createUserWithEmailAndPassword(FBAuth, email, password)
+            .then((user) => {
+                // user is created in Firebase
+                console.log(user)
+                // alert user that account has been created
+            })
+            .catch((error) => {
+                console.log(error.code, error.message)
+            })
+    }
+
     return (
         <Container fluid className="mt-4">
             <Row>
                 <Col md={{ span: 4, offset: 4 }}>
-                    <Form>
+                    <Form onSubmit={(evt) => {
+                        evt.preventDefault()
+                        signUpHandler()
+                    }}>
                         <h3>Sign up for an account</h3>
                         <Form.Group>
                             <Form.Label>Email Address</Form.Label>
@@ -51,7 +70,7 @@ export function Signup(props) {
                             />
                         </Form.Group>
                         <Button
-                            ariant="primary"
+                            variant="primary"
                             type="submit"
                             className="my-2 w-100"
                             disabled={(validEmail && validPassword) ? false : true}

@@ -15,6 +15,7 @@ import { Header } from "./components/Header";
 import { Routes, Route } from "react-router-dom";
 // contexts
 import { NavContext } from "./contexts/NavContext";
+import { FBAuthContext } from "./contexts/FBAuthContext";
 
 const FirebaseApp = initializeApp(firebaseConfig);
 const FirebaseAuth = getAuth(FirebaseApp);
@@ -44,14 +45,15 @@ function App() {
       <NavContext.Provider value={navItems}>
         <Header />
       </NavContext.Provider>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
+      <FBAuthContext.Provider value={FirebaseAuth}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
+      </FBAuthContext.Provider>
     </div>
   );
 }
