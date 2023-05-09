@@ -1,6 +1,6 @@
 import { firebaseConfig } from "./config/Config";
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
 
 import './App.css';
@@ -10,6 +10,7 @@ import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
 import { Signin } from "./pages/Signin";
 import { Signup } from "./pages/Signup";
+import { SignOut } from "./pages/Signout";
 // components
 import { Header } from "./components/Header";
 import { Routes, Route } from "react-router-dom";
@@ -40,6 +41,16 @@ function App() {
   const [navItems, setNavItems] = useState(NavRoutes);
   const [auth, setAuth] = useState(null);
 
+  onAuthStateChanged(FirebaseAuth, (user) => {
+    if (user) {
+      setAuth(user)
+      setNavItems(AuthNavRoutes)
+    } else {
+      setAuth(null)
+      setNavItems(NavRoutes)
+    }
+  })
+
   return (
     <div className="App">
       <NavContext.Provider value={navItems}>
@@ -52,6 +63,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/signout" element={<SignOut />} />
         </Routes>
       </FBAuthContext.Provider>
     </div>
