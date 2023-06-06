@@ -13,6 +13,7 @@ import { Contact } from "./pages/Contact";
 import { Signin } from "./pages/Signin";
 import { Signup } from "./pages/Signup";
 import { SignOut } from "./pages/Signout";
+import { Detail } from "./pages/Detail";
 // components
 import { Header } from "./components/Header";
 import { Routes, Route } from "react-router-dom";
@@ -72,6 +73,7 @@ function App() {
               <Route path="/signin" element={<Signin />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/signout" element={<SignOut />} />
+              <Route path="/detail/:bookId" element={<Detail />} />
             </Routes>
           </FBStorageContext.Provider>
         </FBDbContext.Provider>
